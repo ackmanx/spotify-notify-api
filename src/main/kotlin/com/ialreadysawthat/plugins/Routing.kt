@@ -32,6 +32,7 @@ fun Application.configureRouting() {
         }
         static("/static") {
             resources("static")
+            defaultResource("static/index.html")
         }
     }
 }
