@@ -3,6 +3,11 @@ val ktor_version: String by project
 val kotlin_version: String by project
 val logback_version: String by project
 
+// Heroku-specific
+tasks.create("stage") {
+    dependsOn("installDist")
+}
+
 plugins {
     application
     kotlin("jvm") version "1.6.0"
