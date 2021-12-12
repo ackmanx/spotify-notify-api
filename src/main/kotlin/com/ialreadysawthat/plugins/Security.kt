@@ -32,10 +32,10 @@ fun Application.configureSecurity() {
     }
 
     get("callback") {
-      val code = call.request.queryParameters["code"] ?: ""
-      val authorization = SpotifyUserAuthorization(authorizationCode = code)
-
-      val api = spotifyClientApi(client_id, client_secret, redirect_url, authorization).build()
+      val api = spotifyClientApi(client_id, client_secret, redirect_url) {
+        val code = call.request.queryParameters["code"] ?: ""
+        authorization = SpotifyUserAuthorization(authorizationCode = code)
+      }.build()
 
       call.respond(ClientProfileApi(api).getClientProfile())
     }
