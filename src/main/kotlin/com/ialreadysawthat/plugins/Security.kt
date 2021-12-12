@@ -2,6 +2,7 @@ package com.ialreadysawthat.plugins
 
 import com.adamratzman.spotify.SpotifyScope
 import com.adamratzman.spotify.SpotifyUserAuthorization
+import com.adamratzman.spotify.endpoints.client.ClientProfileApi
 import com.adamratzman.spotify.getSpotifyAuthorizationUrl
 import com.adamratzman.spotify.spotifyClientApi
 import io.ktor.application.*
@@ -35,7 +36,7 @@ fun Application.configureSecurity() {
 
       val api = spotifyClientApi(client_id, client_secret, "http://me:8080/callback", authorization).build()
 
-      call.respond("It worked!")
+      call.respond(ClientProfileApi(api).getClientProfile())
     }
   }
 }
