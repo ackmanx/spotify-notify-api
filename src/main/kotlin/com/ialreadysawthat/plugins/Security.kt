@@ -28,14 +28,20 @@ fun Application.configureSecurity() {
         redirectUri = redirect_url,
       )
 
+      println("/login url: $url")
+
       call.respondRedirect(url)
     }
 
-    get("/callback") {
+    get("callback") {
       val code = call.request.queryParameters["code"] ?: ""
       val authorization = SpotifyUserAuthorization(authorizationCode = code)
 
+      println("/callback code: $code")
+
       val api = spotifyClientApi(client_id, client_secret, redirect_url, authorization).build()
+
+      println("/callback got that api")
 
       call.respond(ClientProfileApi(api).getClientProfile())
     }
