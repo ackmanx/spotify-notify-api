@@ -2,6 +2,8 @@ package com.ialreadysawthat.plugins
 
 import io.ktor.features.*
 import io.ktor.application.*
+import io.ktor.response.*
+import io.ktor.request.*
 
 fun Application.configureHTTP() {
     install(Compression) {
@@ -10,7 +12,7 @@ fun Application.configureHTTP() {
         }
         deflate {
             priority = 10.0
-            minimumSize(1024)
+            minimumSize(1024) // condition
         }
     }
 
