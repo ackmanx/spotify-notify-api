@@ -15,7 +15,7 @@ fun Application.configureSecurity() {
   val client_secret = "76f2fd5049574e09899dcf84810e5fef" //this will live in heroku config so it isn't exposed via git, but until then store it here and regen a new key later
   val redirect_url =
     if (System.getenv("ENV") == "local") "http://me:8080/callback"
-    else "http://spotify-notify-api.herokuapp.com/callback"
+    else "https://spotify-notify-api.herokuapp.com/callback"
 
   routing {
     get("login") {
@@ -28,8 +28,6 @@ fun Application.configureSecurity() {
         redirectUri = redirect_url,
       )
 
-      println("/login url: $url")
-
       call.respondRedirect(url)
     }
 
@@ -37,11 +35,7 @@ fun Application.configureSecurity() {
       val code = call.request.queryParameters["code"] ?: ""
       val authorization = SpotifyUserAuthorization(authorizationCode = code)
 
-      println("/callback code: $code")
-
       val api = spotifyClientApi(client_id, client_secret, redirect_url, authorization).build()
-
-      println("/callback got that api")
 
       call.respond(ClientProfileApi(api).getClientProfile())
     }
