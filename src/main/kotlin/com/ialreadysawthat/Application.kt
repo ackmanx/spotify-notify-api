@@ -1,15 +1,15 @@
 package com.ialreadysawthat
 
+import com.ialreadysawthat.plugins.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
-import com.ialreadysawthat.plugins.*
 
 fun main() {
-    embeddedServer(Netty, port = System.getenv("PORT").toInt()) {
-        configureRouting()
-        configureSecurity()
-        configureHTTP()
-        configureTemplating()
-        configureSerialization()
-    }.start(wait = true)
+  embeddedServer(Netty, port = System.getenv("PORT").toInt()) {
+    configureRouting()
+    configureSecurity()
+    configureHTTP()
+    configureTemplating()
+    configureSerialization()
+  }.start(wait = true)
 }
