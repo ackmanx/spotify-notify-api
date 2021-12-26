@@ -46,7 +46,14 @@ fun Application.configureSecurity() {
 
       val authorization = SpotifyUserAuthorization(authorizationCode = code)
 
-      val api = spotifyClientApi(clientId, clientSecret, redirectUrl, authorization).build()
+      val api = spotifyClientApi(
+        clientId,
+        clientSecret,
+        redirectUrl,
+        authorization,
+      ) {
+        enableDebugMode = true
+      }.build()
 
       call.respond(ClientProfileApi(api).getClientProfile())
     }
