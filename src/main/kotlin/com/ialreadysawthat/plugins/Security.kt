@@ -9,6 +9,11 @@ import io.ktor.application.*
 import io.ktor.http.*
 import io.ktor.response.*
 import io.ktor.routing.*
+import kotlinx.coroutines.future.await
+import java.net.URI
+import java.net.http.HttpRequest
+import java.time.Duration
+
 
 fun Application.configureSecurity() {
 
@@ -36,6 +41,24 @@ fun Application.configureSecurity() {
 
     get("callback") {
       val code = call.request.queryParameters["code"]
+
+      val httpClient: java.net.http.HttpClient = java.net.http.HttpClient.newBuilder()
+        .connectTimeout(Duration.ofSeconds(10))
+        .build()
+
+      //todo majerus: I've sorta lost steam wanting to do this app
+      //todo majerus: Kotlin is not as fun to learn as I was hoping and kind of a pain in the ass right now
+      //todo majerus: Main issue is my spotify library works locally but not with Heroku, no messaging why
+      //todo majerus: I was trying to do auth myself quick to see if that's it but I'm bored now
+      val request = java.net.http.HttpRequest.newBuilder()
+        .header("Content-Type", "application/json")
+        .POST(HttpRequest.BodyPublishers.ofString("\"code\": $code, \"redirect_uri\": \"http://localhost:8080/auth/callback\""))
+        .uri(URI.create("https://accounts.spotify.com/api/token"))
+        .build()
+      val httpResponse = httpClient.sendAsync(request, java.net.http.HttpResponse.BodyHandlers.ofString()).await()
+//      println(httpResponse.body())
+
+//      val spotifyTokenUrl = "https://accounts.spotify.com/api/token"
 
       if (code.isNullOrBlank()) {
         println("Code is null or blank: $code")
